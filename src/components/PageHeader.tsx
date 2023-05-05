@@ -30,7 +30,7 @@ const PageHeader: React.FC = () => {
 
   return (
     <Header
-      className="d-flex justify-content-between align-items-center"
+      className="d-flex justify-content-between align-items-center px-4"
       style={{ background: "white" }}
     >
       <img src={Logo} height={32} className="" />
