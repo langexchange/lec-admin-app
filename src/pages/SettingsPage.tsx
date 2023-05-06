@@ -1,11 +1,11 @@
 import {
   Button,
   Card,
+  Dropdown,
   Form,
   Input,
   Layout,
   Menu,
-  MenuProps,
   Modal,
   Space,
   Spin,
@@ -19,6 +19,9 @@ import {
   SettingOutlined,
   EditOutlined,
   DeleteOutlined,
+  DownOutlined,
+  UserOutlined,
+  DashboardOutlined,
 } from "@ant-design/icons";
 import {
   useAddNewSupportedLocaleMutation,
@@ -31,8 +34,19 @@ import { useEffect, useState } from "react";
 import { ColumnsType } from "antd/es/table";
 import { Content } from "antd/es/layout/layout";
 import TextArea from "antd/es/input/TextArea";
+import type { MenuProps } from "antd";
 
 const items2: MenuProps["items"] = [
+  {
+    label: "Dashboard",
+    key: "dashboard",
+    icon: <DashboardOutlined />,
+  },
+  {
+    label: "Users",
+    key: "users",
+    icon: <UserOutlined />,
+  },
   {
     label: "Settings",
     key: "settings",
@@ -91,7 +105,7 @@ const SettingsPage: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const showAddModal = (record: any) => {
+  const showAddModal = () => {
     setIsAddModalOpen(true);
   };
 
@@ -111,7 +125,7 @@ const SettingsPage: React.FC = () => {
     setIsAddModalOpen(false);
   };
 
-  const showNewLocaleModal = (record: any) => {
+  const showNewLocaleModal = () => {
     setIsNewLocaleModalOpen(true);
   };
 
@@ -128,12 +142,37 @@ const SettingsPage: React.FC = () => {
   };
 
   const handleNewLocaleCancel = () => {
-    setIsAddModalOpen(false);
+    setIsNewLocaleModalOpen(false);
   };
 
   useEffect(() => {
     console.log(data);
   }, [data, isLoading]);
+
+  const items: MenuProps["items"] = [
+    {
+      label: "Add new locale item",
+      key: "1",
+    },
+    {
+      label: "Add new supported locale",
+      key: "2",
+    },
+  ];
+
+  const handleMenuClick = (e: any) => {
+    if (e.key === "1") {
+      showAddModal();
+    }
+    if (e.key === "2") {
+      showNewLocaleModal();
+    }
+  };
+
+  const menuProps = {
+    items,
+    onClick: handleMenuClick,
+  };
 
   const columns: ColumnsType<DataType> = [
     {
@@ -165,38 +204,47 @@ const SettingsPage: React.FC = () => {
     <>
       <Layout>
         <PageHeader />
-        <Layout style={{ minHeight: "calc(100vh - 64px)" }}>
-          <Sider width={250} style={{ background: "white" }}>
+        <Layout style={{ height: "calc(100vh - 64px)" }}>
+          <Sider
+            width={250}
+            style={{
+              background: "white",
+            }}
+            collapsible={true}
+            theme="light"
+          >
             <Menu
               mode="inline"
               defaultSelectedKeys={["1"]}
               defaultOpenKeys={["sub1"]}
-              style={{ height: "100%", borderRight: 0 }}
+              style={{ height: "100%" }}
               items={items2}
+              className="pt-3"
+              selectedKeys={["settings"]}
             />
           </Sider>
-          <Content className="px-4 py-3">
+          <Content className="px-4 py-3" style={{ overflowY: "scroll" }}>
             <div className="d-flex align-items-center justify-content-between mb-3">
-              <Typography.Title level={3} className="m-0">
+              <Typography.Title level={4} className="m-0">
                 Locale settings
               </Typography.Title>
-              <Button type="primary" onClick={showAddModal}>
-                Add new
-              </Button>
+              <Dropdown menu={menuProps}>
+                <Button type="primary">
+                  <Space>
+                    Action
+                    <DownOutlined />
+                  </Space>
+                </Button>
+              </Dropdown>
             </div>
             <Card
               size="small"
               className="mb-2"
               loading={isSupportedLocalesLoading}
             >
-              <div className="d-flex justify-content-between align-items-start">
-                <Typography.Title level={5} className="m-0">
-                  Current supported locale
-                </Typography.Title>
-                <Button type="primary" onClick={showNewLocaleModal}>
-                  Add new
-                </Button>
-              </div>
+              <Typography.Title level={5} className="m-0 mb-3">
+                Currently supported locales
+              </Typography.Title>
               <Space>
                 {supportedLocales?.map((item: any) => (
                   <Tag bordered={false} style={{ fontSize: "18px" }}>
