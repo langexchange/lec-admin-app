@@ -2,11 +2,12 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import "./bootstrap.scss";
 import { ConfigProvider } from "antd";
+import { RouterProvider } from "react-router-dom";
+import router from "./router";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -15,9 +16,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <ConfigProvider
-        theme={{ token: { colorPrimary: "#4096ff", borderRadius: 12 } }}
+        theme={{ token: { colorPrimary: "#4096ff", borderRadius: 8 } }}
       >
-        <App />
+        <RouterProvider router={router} />
       </ConfigProvider>
     </Provider>
   </React.StrictMode>
