@@ -6,7 +6,6 @@ const ProtectedRoutes: React.FC = () => {
   const credentials = useAppSelector(selectCredentials);
   const location = useLocation();
 
-  console.log("ProtectedRoutes", credentials);
   if (!credentials.token)
     return <Navigate to="/login" state={{ from: location }} replace />;
 

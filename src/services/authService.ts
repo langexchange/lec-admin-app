@@ -34,6 +34,16 @@ export interface AuthRequest {
   password: string;
 }
 
+export interface AdminAccount {
+  id: string;
+  email: string;
+  firstName: string;
+  isSupperAdmin: boolean;
+  remainName: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
@@ -61,7 +71,24 @@ export const authApi = createApi({
         body: data,
       }),
     }),
+    getAdmins: builder.query<AdminAccount[], undefined>({
+      query: () => ({
+        url: "/admin/api/auth/admins",
+        method: "GET",
+      }),
+    }),
+    deleteAdminAccount: builder.mutation<undefined, string>({
+      query: (id) => ({
+        url: `/admin/api/auth/admins/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation } = authApi;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useGetAdminsQuery,
+  useDeleteAdminAccountMutation,
+} = authApi;

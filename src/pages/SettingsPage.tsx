@@ -4,8 +4,6 @@ import {
   Dropdown,
   Form,
   Input,
-  Layout,
-  Menu,
   Modal,
   Space,
   Spin,
@@ -13,16 +11,7 @@ import {
   Tag,
   Typography,
 } from "antd";
-import Sider from "antd/es/layout/Sider";
-import PageHeader from "../components/PageHeader";
-import {
-  SettingOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  DownOutlined,
-  UserOutlined,
-  DashboardOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, DownOutlined } from "@ant-design/icons";
 import {
   useAddNewSupportedLocaleMutation,
   useCreateSettingsMutation,
@@ -30,29 +19,10 @@ import {
   useGetAllSupportedLocalesQuery,
   useUpdateSettingsMutation,
 } from "../services/settingsService";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ColumnsType } from "antd/es/table";
-import { Content } from "antd/es/layout/layout";
 import TextArea from "antd/es/input/TextArea";
 import type { MenuProps } from "antd";
-
-const items2: MenuProps["items"] = [
-  {
-    label: "Dashboard",
-    key: "dashboard",
-    icon: <DashboardOutlined />,
-  },
-  {
-    label: "Users",
-    key: "users",
-    icon: <UserOutlined />,
-  },
-  {
-    label: "Settings",
-    key: "settings",
-    icon: <SettingOutlined />,
-  },
-];
 
 interface DataType {
   key: string;
@@ -145,10 +115,6 @@ const SettingsPage: React.FC = () => {
     setIsNewLocaleModalOpen(false);
   };
 
-  useEffect(() => {
-    console.log(data);
-  }, [data, isLoading]);
-
   const items: MenuProps["items"] = [
     {
       label: "Add new locale item",
@@ -202,74 +168,47 @@ const SettingsPage: React.FC = () => {
 
   return (
     <>
-      <Layout>
-        <PageHeader />
-        <Layout style={{ height: "calc(100vh - 64px)" }}>
-          <Sider
-            width={250}
-            style={{
-              background: "white",
-            }}
-            collapsible={true}
-            theme="light"
-          >
-            <Menu
-              mode="inline"
-              defaultSelectedKeys={["1"]}
-              defaultOpenKeys={["sub1"]}
-              style={{ height: "100%" }}
-              items={items2}
-              className="pt-3"
-              selectedKeys={["settings"]}
-            />
-          </Sider>
-          <Content className="px-4 py-3" style={{ overflowY: "scroll" }}>
-            <div className="d-flex align-items-center justify-content-between mb-3">
-              <Typography.Title level={4} className="m-0">
-                Locale settings
-              </Typography.Title>
-              <Dropdown menu={menuProps}>
-                <Button type="primary">
-                  <Space>
-                    Action
-                    <DownOutlined />
-                  </Space>
-                </Button>
-              </Dropdown>
-            </div>
-            <Card
-              size="small"
-              className="mb-2"
-              loading={isSupportedLocalesLoading}
-            >
-              <Typography.Title level={5} className="m-0 mb-3">
-                Currently supported locales
-              </Typography.Title>
-              <Space>
-                {supportedLocales?.map((item: any) => (
-                  <Tag bordered={false} style={{ fontSize: "18px" }}>
-                    {item}
-                  </Tag>
-                ))}
-              </Space>
-            </Card>
-            <Spin spinning={isLoading}>
-              {data &&
-                data.map((item: any) => {
-                  return (
-                    <Table
-                      columns={columns}
-                      dataSource={item.settings}
-                      bordered
-                      title={() => item.locale}
-                      key={item.locale}
-                    />
-                  );
-                })}
-            </Spin>
-          </Content>
-        </Layout>
-      </Layout>
+      <div className="d-flex align-items-center justify-content-between mb-3">
+        <Typography.Title level={4} className="m-0">
+          Locale settings
+        </Typography.Title>
+        <Dropdown menu={menuProps}>
+          <Button type="primary">
+            <Space>
+              Action
+              <DownOutlined />
+            </Space>
+          </Button>
+        </Dropdown>
+      </div>
+      <Card size="small" className="mb-2" loading={isSupportedLocalesLoading}>
+        <Typography.Title level={5} className="m-0 mb-3">
+          Currently supported locales
+        </Typography.Title>
+        <Space>
+          {supportedLocales?.map((item: any) => (
+            <Tag bordered={false} style={{ fontSize: "18px" }}>
+              {item}
+            </Tag>
+          ))}
+        </Space>
+      </Card>
+      <Spin spinning={isLoading}>
+        {data &&
+          data.map((item: any) => {
+            return (
+              <Table
+                columns={columns}
+                dataSource={item.settings}
+                bordered
+                title={() => (
+                  <span style={{ fontWeight: 700 }}>{item.locale}</span>
+                )}
+                key={item.locale}
+              />
+            );
+          })}
+      </Spin>
       <Modal
         title="Edit"
         open={isModalOpen}
