@@ -1,21 +1,43 @@
-import {
-  createRoutesFromElements,
-  createBrowserRouter,
-  Route,
-} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
+import AppLayout from "./layout/AppLayout";
+import AdminPage from "./pages/AdminPage";
 import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
+import UsersPage from "./pages/UsersPage";
 import ProtectedRoutes from "./ProtectedRoutes";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/">
-      <Route path="login" element={<LoginPage />} />
-      <Route element={<ProtectedRoutes />}>
-        <Route path="settings" element={<SettingsPage />} />
-      </Route>
-    </Route>
-  )
-);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    children: [
+      {
+        path: "login",
+        element: <LoginPage />,
+      },
+      {
+        element: <ProtectedRoutes />,
+        children: [
+          {
+            element: <AppLayout />,
+            children: [
+              {
+                path: "settings",
+                element: <SettingsPage />,
+              },
+              {
+                path: "users",
+                element: <UsersPage />,
+              },
+              {
+                path: "admins",
+                element: <AdminPage />,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+]);
 
 export default router;
