@@ -32,6 +32,8 @@ jobs:
           ### file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/le-admin-app:latest
+          build-args: |
+            REACT_APP_API_URL_ROOT=${{ secrets.REACT_APP_API_URL_ROOT }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Move cache
