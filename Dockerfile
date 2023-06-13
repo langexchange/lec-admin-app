@@ -12,6 +12,11 @@ RUN yarn build
 
 # Stage 2: Serve the built app
 FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
+
+COPY ./nginx/*.conf.template /etc/nginx/templates/
+COPY ./nginx/nginx.conf /etc/nginx/
+
+COPY --from=build /app/build /usr/local/src/langex
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
